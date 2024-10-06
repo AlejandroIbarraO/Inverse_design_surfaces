@@ -1,2 +1,2 @@
 # pyLocalGlobal
-Pure python implementation of the local global algorithm.
+Here there are compilation of algorithms and to inverse desing surfaces.

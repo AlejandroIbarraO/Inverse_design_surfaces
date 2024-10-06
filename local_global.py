@@ -13,8 +13,8 @@ class local_global:
         self.precomputation_state = False
         self.flavor = flavor
         # by default ARAP
-        self.lam1 = 1.0
-        self.lam2 = 1.0
+        self.lam1 = 1.2
+        self.lam2 = 0.8
     def precomputation(self):
         self.grad = igl.grad(self.v,self.f)
         cot = igl.cotmatrix_entries(self.v,self.f)
@@ -93,10 +93,12 @@ class local_global:
             lam1,lam2 = [np.pi/2,1.0]
         elif self.flavor == 'Baromophs':
             lam1 = 1.0
+        else:
+            lam1,lam2 = [self.lam1,self.lam2]
         for i,_ in enumerate(self.f):
             U,c_sig,V = np.linalg.svd(J[i])
             if self.flavor == 'Baromophs':
-                lam2 = (c_sig[1]<0.9)*c_sig[1]+(c_sig[1]>=0.9)*0.9
+                lam2 = (c_sig[1]<1.0)*c_sig[1]+(c_sig[1]>=1.0)*1.0 # clip the values
             sigm = np.array([[lam1,0,0],[0,lam2,0]])
             L[i,:,:] = np.dot(U,np.dot(sigm,V))
         return L,J
@@ -114,7 +116,8 @@ class local_global:
             self.global_min(L)
     def local_global_n_step(self,n_steps):
         if self.precomputation_state == True:
-            for _ in range(n_steps):
+            for i in range(n_steps):
+                print(i,n_steps-1,i/(n_steps-1))
                 L,_ = self.local_min()
                 self.global_min(L)
                 
@@ -151,5 +154,4 @@ class local_global:
         fy = np.sin(angles)
         vx = self.scalar_to_vertex(fx)
         vy = self.scalar_to_vertex(fy)
-        centers = igl.barycenter(self.u,self.f)
-        return centers,np.arctan2(vy,vx)
+        return np.arctan2(vy,vx)
