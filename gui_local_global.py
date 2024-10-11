@@ -27,8 +27,8 @@ ui_angle_rad = 0.2
 ui_text = "some input text"
 ui_options = ["Fabric", "Baromophs", "Direct Control"]
 ui_options_selected = ui_options[0]
-ui_lm1 = 1.2
-ui_lm2 = 0.8
+ui_lm1 = 1.25
+ui_lm2 = 0.8944271909999159
 ui_period = 2.0
 def display_mesh():
     if lg is not None:

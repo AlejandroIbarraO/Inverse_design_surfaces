@@ -15,6 +15,7 @@ class local_global:
         # by default ARAP
         self.lam1 = 1.2
         self.lam2 = 0.8
+        self.constraints = np.array([])
     def precomputation(self):
         self.grad = igl.grad(self.v,self.f)
         cot = igl.cotmatrix_entries(self.v,self.f)
@@ -49,6 +50,7 @@ class local_global:
         self.ij = ij
         self.cot_ij = cot_ij
         self.Kext = Kext
+        
 
     def constrain(self,constrains):
         self.constraints = constrains
@@ -117,7 +119,7 @@ class local_global:
     def local_global_n_step(self,n_steps):
         if self.precomputation_state == True:
             for i in range(n_steps):
-                print(i,n_steps-1,i/(n_steps-1))
+                #print(i,n_steps-1,i/(n_steps-1))
                 L,_ = self.local_min()
                 self.global_min(L)
                 
